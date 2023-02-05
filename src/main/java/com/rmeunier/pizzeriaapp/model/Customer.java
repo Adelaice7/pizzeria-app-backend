@@ -2,6 +2,7 @@ package com.rmeunier.pizzeriaapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 import java.util.Objects;
@@ -27,6 +28,7 @@ public class Customer {
     private String username;
     @NotNull
     @Size(min = 8, max = 255)
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")
     private String password;
     public Customer() {
 

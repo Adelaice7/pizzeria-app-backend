@@ -1,5 +1,6 @@
 package com.rmeunier.pizzeriaapp;
 
+import com.rmeunier.pizzeriaapp.error.ApiError;
 import com.rmeunier.pizzeriaapp.model.Customer;
 import com.rmeunier.pizzeriaapp.repo.CustomerRepository;
 import com.rmeunier.pizzeriaapp.shared.GenericResponse;
@@ -148,6 +149,41 @@ public class CustomerControllerTest {
         customer.setPassword(valueOf256Chars);
         ResponseEntity<Object> response = postSignup(customer, Object.class);
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+    @Test
+    public void postCustomer_whenCustomerHasPasswordWithAllLowercase_receiveBadRequest() {
+        Customer customer = createValidCustomer();
+        customer.setPassword("alllowercase");
+        ResponseEntity<Object> response = postSignup(customer, Object.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+    @Test
+    public void postCustomer_whenCustomerHasPasswordWithAllUppercase_receiveBadRequest() {
+        Customer customer = createValidCustomer();
+        customer.setPassword("ALLUPPERCASE");
+        ResponseEntity<Object> response = postSignup(customer, Object.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+    @Test
+    public void postCustomer_whenCustomerHasPasswordWithAllNumbers_receiveBadRequest() {
+        Customer customer = createValidCustomer();
+        customer.setPassword("123456789");
+        ResponseEntity<Object> response = postSignup(customer, Object.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    public void postCustomer_whenCustomerIsInvalid_receiveApiError() {
+        Customer customer = new Customer();
+        ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
+        assertThat(response.getBody().getUrl()).isEqualTo(API_CUSTOMERS);
+    }
+
+    @Test
+    public void postCustomer_whenCustomerIsInvalid_receiveApiErrorWithValidationErrors() {
+        Customer customer = new Customer();
+        ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
+        assertThat(response.getBody().getValidationErrors().size()).isEqualTo(6);
     }
 
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response) {
