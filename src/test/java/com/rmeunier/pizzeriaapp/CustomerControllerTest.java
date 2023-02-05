@@ -219,8 +219,9 @@ public class CustomerControllerTest {
         Customer customer = new Customer();
         customer.setFirstName("Joe");
         customer.setLastName("Doe");
+        customer.setUsername("joedoe");
         customer.setPhoneNumber("+33784514411");
-        customer.setPassword("p4ssword");
+        customer.setPassword("PassWord_1");
 
         return customer;
     }

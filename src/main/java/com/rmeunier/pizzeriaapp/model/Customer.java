@@ -1,5 +1,6 @@
 package com.rmeunier.pizzeriaapp.model;
 
+import com.rmeunier.pizzeriaapp.shared.UniqueUsername;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -25,6 +26,7 @@ public class Customer {
     private String phoneNumber;
     @NotNull(message = "{com.rmeunier.pizzeriaapp.username.NotNull.message}")
     @Size(min = 4, max = 255)
+    @UniqueUsername
     private String username;
     @NotNull
     @Size(min = 8, max = 255)
