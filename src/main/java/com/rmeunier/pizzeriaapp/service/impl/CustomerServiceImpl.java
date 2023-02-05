@@ -29,11 +29,14 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void updateCustomer(Long id, Customer customer) {
         customerRepository.findById(id).ifPresent(oldCustomer -> {
-//            oldCustomer.setEmail(customer.getEmail());
             oldCustomer.setFirstName(customer.getFirstName());
             oldCustomer.setLastName(customer.getLastName());
             oldCustomer.setPhoneNumber(customer.getPhoneNumber());
+            oldCustomer.setUsername(customer.getUsername());
+            oldCustomer.setEmail(customer.getEmail());
+            oldCustomer.setPassword(passwordEncoder.encode(customer.getPassword()));
 
+            oldCustomer.setModifiedAt(new Date().getTime());
             customerRepository.save(oldCustomer);
         });
 
@@ -42,7 +45,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void deleteCustomer(Long id) {
         customerRepository.findById(id).ifPresent(customer -> {
-            customerRepository.delete(customer);
+            customer.setDeletedAt(new Date().getTime());
         });
     }
 

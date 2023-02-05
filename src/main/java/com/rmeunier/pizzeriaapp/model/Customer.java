@@ -5,11 +5,14 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.Objects;
 
 @Entity
 @Table(name = "customer")
+@NoArgsConstructor
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,9 +35,16 @@ public class Customer {
     @Size(min = 8, max = 255)
     @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "{com.rmeunier.pizzeriaapp.password.Pattern.message}")
     private String password;
-    public Customer() {
 
-    }
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "order_details_id", referencedColumnName = "id")
+    private OrderDetails orderDetails;
+
+    private long createdAt = new Date().getTime();
+
+    private long modifiedAt = new Date().getTime();
+
+    private long deletedAt = -1L;
 
     public Customer(String firstName, String lastName, String email, String phoneNumber, String username, String password) {
         this.firstName = firstName;
@@ -91,6 +101,30 @@ public class Customer {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public long getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(long createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public long getModifiedAt() {
+        return modifiedAt;
+    }
+
+    public void setModifiedAt(long modifiedAt) {
+        this.modifiedAt = modifiedAt;
+    }
+
+    public long getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(long deletedAt) {
+        this.deletedAt = deletedAt;
     }
 
     @Override

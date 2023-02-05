@@ -1,12 +1,13 @@
 package com.rmeunier.pizzeriaapp.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Objects;
 
 @Entity
 @Table(name = "customer_address")
+@NoArgsConstructor
 public class CustomerAddress {
 
     @Id
@@ -19,10 +20,6 @@ public class CustomerAddress {
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;
-
-    public CustomerAddress() {
-
-    }
 
     public CustomerAddress(String streetAddress, String city, String zipCode, String country, Customer customer) {
         this.streetAddress = streetAddress;
