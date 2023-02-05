@@ -23,12 +23,12 @@ public class Customer {
     private String email;
     @NotNull
     private String phoneNumber;
-    @NotNull
+    @NotNull(message = "{com.rmeunier.pizzeriaapp.username.NotNull.message}")
     @Size(min = 4, max = 255)
     private String username;
     @NotNull
     @Size(min = 8, max = 255)
-    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$")
+    @Pattern(regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$", message = "{com.rmeunier.pizzeriaapp.password.Pattern.message}")
     private String password;
     public Customer() {
 

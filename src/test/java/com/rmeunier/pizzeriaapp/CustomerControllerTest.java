@@ -16,6 +16,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -184,6 +185,31 @@ public class CustomerControllerTest {
         Customer customer = new Customer();
         ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
         assertThat(response.getBody().getValidationErrors().size()).isEqualTo(6);
+    }
+
+    @Test
+    public void postCustomer_whenCustomerHasNullUsername_receiveMessageOfNullErrorForUsername() {
+        Customer customer = createValidCustomer();
+        customer.setUsername(null);
+        ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("username")).isEqualTo("Username cannot be null");
+    }
+    @Test
+    public void postCustomer_whenCustomerHasInvalidLengthUsername_receiveGenericMessageOfError() {
+        Customer customer = createValidCustomer();
+        customer.setUsername("abc");
+        ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("username")).isEqualTo("It must have minimum 4 and maximum 255 characters");
+    }
+    @Test
+    public void postCustomer_whenCustomerHasInvalidPassword_receiveGenericMessageOfError() {
+        Customer customer = createValidCustomer();
+        customer.setPassword("abc");
+        ResponseEntity<ApiError> response = postSignup(customer, ApiError.class);
+        Map<String, String> validationErrors = response.getBody().getValidationErrors();
+        assertThat(validationErrors.get("password")).isEqualTo("Password must have at least one uppercase, one lowercase, one number and one special character. Minimum 8 characters");
     }
 
     public <T> ResponseEntity<T> postSignup(Object request, Class<T> response) {
