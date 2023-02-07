@@ -5,14 +5,22 @@ import com.rmeunier.pizzeriaapp.repo.CustomerRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+import java.util.Optional;
 
 public class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, String> {
 
     @Autowired
     CustomerRepository customerRepository;
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Customer inDB = customerRepository.findByUsername(value);
-        return inDB == null;
+        Optional<Customer> optionalCustomer = customerRepository.findByUsername(value);
+        if (optionalCustomer != null && optionalCustomer.isPresent()) {
+            return true;
+        } else {
+            throw new UsernameNotFoundException("User not found with username: " + value);
+        }
     }
 }

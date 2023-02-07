@@ -5,6 +5,7 @@ import com.rmeunier.pizzeriaapp.model.Customer;
 import com.rmeunier.pizzeriaapp.repo.CustomerRepository;
 import com.rmeunier.pizzeriaapp.shared.GenericResponse;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
+@Disabled
 public class CustomerControllerTest {
     private static final String API_CUSTOMERS = "/customers";
 

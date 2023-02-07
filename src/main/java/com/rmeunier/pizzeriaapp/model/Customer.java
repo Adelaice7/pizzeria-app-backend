@@ -5,15 +5,25 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.Date;
-import java.util.Objects;
+import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "customer")
-@NoArgsConstructor
-public class Customer {
+public class Customer implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -40,103 +50,57 @@ public class Customer {
     @JoinColumn(name = "order_details_id", referencedColumnName = "id")
     private OrderDetails orderDetails;
 
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     private long createdAt = new Date().getTime();
 
     private long modifiedAt = new Date().getTime();
 
     private long deletedAt = -1L;
 
-    public Customer(String firstName, String lastName, String email, String phoneNumber, String username, String password) {
+    public Customer(String firstName, String lastName, String email, String phoneNumber, String username, String password, OrderDetails orderDetails) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.password = password;
+        this.orderDetails = orderDetails;
     }
 
-    public String getFirstName() {
-        return firstName;
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
     }
 
-    public String getLastName() {
-        return lastName;
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
     }
 
-    public String getEmail() {
-        return email;
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
+    @Override
     public String getUsername() {
-        return username;
+        return this.username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
+    @Override
     public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public long getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(long createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public long getModifiedAt() {
-        return modifiedAt;
-    }
-
-    public void setModifiedAt(long modifiedAt) {
-        this.modifiedAt = modifiedAt;
-    }
-
-    public long getDeletedAt() {
-        return deletedAt;
-    }
-
-    public void setDeletedAt(long deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Customer customer = (Customer) o;
-        return Objects.equals(id, customer.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+        return this.password;
     }
 }
