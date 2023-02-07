@@ -22,6 +22,8 @@ dependencies {
 	implementation("org.springframework.security:spring-security-crypto:6.0.1")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	implementation("org.springdoc:springdoc-openapi-ui:1.6.14")
+
 
 	runtimeOnly("com.mysql:mysql-connector-j")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")

@@ -1,6 +1,7 @@
 package com.rmeunier.pizzeriaapp.service.impl;
 
 import com.rmeunier.pizzeriaapp.model.Customer;
+import com.rmeunier.pizzeriaapp.model.Role;
 import com.rmeunier.pizzeriaapp.repo.CustomerRepository;
 import com.rmeunier.pizzeriaapp.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import java.util.*;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
     @Autowired
     PasswordEncoder passwordEncoder;
@@ -22,8 +23,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void saveCustomer(Customer customer) {
-        customer.setPassword(passwordEncoder.encode(customer.getPassword()));
-        customerRepository.save(customer);
+        Customer newCustomer = Customer.builder()
+                .firstName(customer.getFirstName())
+                .lastName(customer.getLastName())
+                .email(customer.getEmail())
+                .phoneNumber(customer.getPhoneNumber())
+                .username(customer.getUsername())
+                .password(passwordEncoder.encode(customer.getPassword()))
+                .role(Role.USER)
+                .build();
+
+        customerRepository.save(newCustomer);
     }
 
     @Override
