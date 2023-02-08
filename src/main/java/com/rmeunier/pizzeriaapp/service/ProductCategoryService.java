@@ -5,7 +5,7 @@ import com.rmeunier.pizzeriaapp.model.ProductCategory;
 import java.util.Set;
 
 public interface ProductCategoryService {
-    void saveProductCategory(ProductCategory category);
+    boolean saveProductCategory(ProductCategory category);
 
     void updateProductCategory(Long id, ProductCategory category);
 

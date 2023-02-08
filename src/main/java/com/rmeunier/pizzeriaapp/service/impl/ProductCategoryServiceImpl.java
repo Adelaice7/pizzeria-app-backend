@@ -20,8 +20,12 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
     }
 
     @Override
-    public void saveProductCategory(ProductCategory category) {
-        productCategoryRepository.save(category);
+    public boolean saveProductCategory(ProductCategory category) {
+        if (!productCategoryRepository.findByName(category.getName()).isPresent()) {
+            productCategoryRepository.save(category);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -49,7 +53,8 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 
     @Override
     public ProductCategory getProductCategoryByName(String name) {
-        return productCategoryRepository.findByName(name);
+        Optional<ProductCategory> optionalProductCategory = productCategoryRepository.findByName(name);
+        return optionalProductCategory.get();
     }
 
     @Override

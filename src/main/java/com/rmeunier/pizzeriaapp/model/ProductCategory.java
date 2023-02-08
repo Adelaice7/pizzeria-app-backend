@@ -24,6 +24,10 @@ public class ProductCategory {
 
     private long deletedAt = -1L;
 
+    public ProductCategory(String name) {
+        this.name = name;
+    }
+
     public ProductCategory(String name, String desc) {
         this.name = name;
         this.desc = desc;

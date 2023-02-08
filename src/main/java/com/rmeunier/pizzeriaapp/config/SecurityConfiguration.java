@@ -35,9 +35,16 @@ public class SecurityConfiguration {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .anonymous().and()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/**")
                 .permitAll()
+                .requestMatchers("/api/products**", "/api/products/**", "/api/product-categories**", "/api/product-categories/**")
+                .permitAll()
+                .requestMatchers("/error")
+                .permitAll()
+                .and()
+                .authorizeHttpRequests()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -52,7 +59,8 @@ public class SecurityConfiguration {
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(HttpMethod.GET)
-                .requestMatchers("/api/auth/**");
+                .requestMatchers("/api/auth/**")
+                .requestMatchers("/api/products", "/api/products/**", "/api/product-categories**", "/api/product-categories/**");
     }
 
     @Bean
