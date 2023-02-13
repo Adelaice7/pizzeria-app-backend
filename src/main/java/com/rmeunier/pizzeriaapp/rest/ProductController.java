@@ -2,13 +2,13 @@ package com.rmeunier.pizzeriaapp.rest;
 
 import com.rmeunier.pizzeriaapp.error.ProductCategoryNotFoundException;
 import com.rmeunier.pizzeriaapp.model.Product;
-import com.rmeunier.pizzeriaapp.model.ProductCategory;
 import com.rmeunier.pizzeriaapp.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -25,12 +25,24 @@ public class ProductController {
 
     @GetMapping("/pizzas")
     public Set<Product> getPizzas() {
-        return productService.getProductsOfCategory(new ProductCategory("PIZZA"));
+        return productService.getProductsOfCategory("PIZZA");
+    }
+
+    @PostMapping("/addBulk")
+    public ResponseEntity<String> addProducts(@RequestBody List<Product> products) {
+        try {
+            products.forEach(product -> {
+                productService.saveProduct(product);
+            });
+            return ResponseEntity.ok("Products successfully added.");
+        } catch (ProductCategoryNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not add product: category doesn't exist!");
+        }
     }
 
     @GetMapping("/salads")
     public Set<Product> getSalads() {
-        return productService.getProductsOfCategory(new ProductCategory("SALAD"));
+        return productService.getProductsOfCategory("SALAD");
     }
 
     @GetMapping("/{id}")

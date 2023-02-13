@@ -2,7 +2,6 @@ package com.rmeunier.pizzeriaapp.service;
 
 import com.rmeunier.pizzeriaapp.error.ProductCategoryNotFoundException;
 import com.rmeunier.pizzeriaapp.model.Product;
-import com.rmeunier.pizzeriaapp.model.ProductCategory;
 
 import java.util.Set;
 
@@ -18,5 +17,5 @@ public interface ProductService {
 
     Set<Product> getAllProducts();
 
-    Set<Product> getProductsOfCategory(ProductCategory category);
+    Set<Product> getProductsOfCategory(String category);
 }
