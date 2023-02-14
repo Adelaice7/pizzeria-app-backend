@@ -28,6 +28,11 @@ public class ProductController {
         return productService.getProductsOfCategory("PIZZA");
     }
 
+    @GetMapping("/salads")
+    public Set<Product> getSalads() {
+        return productService.getProductsOfCategory("SALAD");
+    }
+
     @PostMapping("/addBulk")
     public ResponseEntity<String> addProducts(@RequestBody List<Product> products) {
         try {
@@ -36,13 +41,8 @@ public class ProductController {
             });
             return ResponseEntity.ok("Products successfully added.");
         } catch (ProductCategoryNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not add product: category doesn't exist!");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Could not add products: category doesn't exist!");
         }
-    }
-
-    @GetMapping("/salads")
-    public Set<Product> getSalads() {
-        return productService.getProductsOfCategory("SALAD");
     }
 
     @GetMapping("/{id}")

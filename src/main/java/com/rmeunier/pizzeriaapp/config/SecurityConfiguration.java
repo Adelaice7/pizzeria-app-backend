@@ -41,6 +41,8 @@ public class SecurityConfiguration {
                 .permitAll()
                 .requestMatchers("/api/products**", "/api/products/**", "/api/product-categories**", "/api/product-categories/**")
                 .permitAll()
+                .requestMatchers("/api/cart/**")
+                .permitAll()
                 .requestMatchers("/error")
                 .permitAll()
                 .and()
@@ -60,7 +62,8 @@ public class SecurityConfiguration {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring().requestMatchers(HttpMethod.GET)
                 .requestMatchers("/api/auth/**")
-                .requestMatchers("/api/products", "/api/products/**", "/api/product-categories**", "/api/product-categories/**");
+                .requestMatchers("/api/products", "/api/products/**", "/api/product-categories**", "/api/product-categories/**")
+                .requestMatchers("/api/cart/**");
     }
 
     @Bean
